@@ -8,6 +8,54 @@ Bluetooth controller, so no external USB Bluetooth adapter is required.
 This repository contains the source for two cooperating kernel drivers, the
 single-file graphical installer and local test-signing tools.
 
+## Download the ready-to-use installer
+
+Most users do not need Visual Studio, the WDK or a local build environment.
+Download `BluetoothMicMac-HFP-Installer.exe` and `SHA256SUMS.txt` from
+[the v1.0.0 release](https://github.com/djmajino/macbook-bootcamp-bluetooth-mic/releases/tag/v1.0.0),
+verify the SHA-256, and run the EXE as administrator.
+
+The published EXE is a complete graphical installer. It checks the supported
+Mac model, Windows version, Boot Camp drivers, Secure Boot, Test Mode and the
+current installation state before making changes. It can also uninstall the
+custom drivers and restore the original Windows configuration.
+
+The current binary uses a local self-signed test certificate and does not have
+a Microsoft production kernel signature. Secure Boot must be disabled, and
+Windows Test Mode must remain enabled while the drivers are loaded. Read the
+safety notes below before installing it.
+
+### Install the ready-to-use package
+
+On the supported MacBook, first make sure the original Boot Camp Bluetooth
+stack can pair and use ordinary Bluetooth devices.
+
+A self-signed kernel driver requires Windows Test Mode for the entire time the
+driver is loaded, not just during installation. The installer cannot disable
+firmware Secure Boot for you.
+
+1. Download `BluetoothMicMac-HFP-Installer.exe` from GitHub Releases.
+2. Right-click it and select **Run as administrator**.
+3. Review the complete prerequisite checklist.
+4. Select **Install**.
+5. If required, approve enabling Test Mode. The computer restarts and setup
+   resumes automatically after the same user signs in.
+6. Reconnect the Bluetooth headset.
+7. Select `Headphones (<device>)` for output and `Headset (<device>)` for input.
+
+Starting the microphone switches Bluetooth audio to the HFP voice path. Lower
+mono playback quality while the microphone is active is a Bluetooth HFP
+limitation.
+
+The installer's **Uninstall / restore Windows** operation removes only this
+project's exact root device and driver packages, restores the Boot Camp path,
+removes the public test certificate and disables Test Mode. If another custom
+driver also relies on Test Mode, review that consequence before uninstalling.
+
+If you prefer to inspect the implementation or do not want to trust the
+prebuilt EXE, clone this source repository and follow
+[Build from source](#build-from-source).
+
 ## Read this first
 
 These are experimental kernel-mode drivers. A bug can cause a Windows crash,
@@ -52,7 +100,12 @@ and audio playback through the MacBook's built-in Bluetooth controller.
 
 ![Windows Bluetooth settings showing a headset connected for microphone and audio](poc.png)
 
-## Build prerequisites
+## Build from source
+
+Use this option if you want to audit or modify the implementation and create a
+fresh installer signed with your own local test certificate.
+
+### Prerequisites
 
 Use a Windows 10 or Windows 11 x64 development machine. Building does not need
 administrator rights, but installing and trusting a test certificate does.
@@ -80,7 +133,7 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 
 It should report MSBuild, Inf2Cat, InfVerif and SignTool paths.
 
-## Get and audit the source
+### Get and audit the source
 
 Clone this repository directly, or create a GitHub fork and clone the fork
 using its **Code** button:
@@ -95,7 +148,7 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 The audit rejects binaries, certificates, private-key formats, dumps, traces,
 common token formats and local Windows user paths from the tracked source tree.
 
-## Build with Codex
+### Build with Codex
 
 The repository contains a root `AGENTS.md` that Codex reads automatically when
 started from this Git workspace. After cloning on Windows, open Codex in the
@@ -111,7 +164,7 @@ Codex will follow the same audited scripts documented below. Installation,
 Test Mode changes and restarts remain separate approval-requiring actions. See
 [docs/CODEX.md](docs/CODEX.md) for more prompts and verification instructions.
 
-## Option A: build and locally test-sign everything
+### Build and locally test-sign everything
 
 This is the easiest development workflow. It creates a self-signed certificate
 whose private key remains non-exportable in the current user's Windows
@@ -154,47 +207,7 @@ artifacts\Release\installer\BluetoothMicMac-HFP-Installer.exe
 
 All of `artifacts` is ignored by Git.
 
-## Prebuilt installer releases
-
-Users who trust the published binary do not need to install Visual Studio or
-build the source. Download `BluetoothMicMac-HFP-Installer.exe` and
-`SHA256SUMS.txt` from the repository's
-[GitHub Releases](https://github.com/djmajino/macbook-bootcamp-bluetooth-mic/releases),
-verify the SHA-256, and run the EXE as administrator.
-
-The current binary uses a local self-signed test certificate and does not have
-a Microsoft production kernel signature. Downloading it does not remove the
-requirements or risks described below: Secure Boot must be disabled and Test
-Mode must remain enabled while the drivers are loaded.
-
-### Install the locally test-signed build
-
-On the supported MacBook, first make sure the original Boot Camp Bluetooth
-stack can pair and use ordinary Bluetooth devices.
-
-A self-signed kernel driver requires Windows Test Mode for the entire time the
-driver is loaded, not just during installation. Secure Boot must be disabled.
-The installer cannot disable firmware Secure Boot for you.
-
-1. Copy `BluetoothMicMac-HFP-Installer.exe` to the target MacBook.
-2. Right-click it and select **Run as administrator**.
-3. Review the complete prerequisite checklist.
-4. Select **Install**.
-5. If required, approve enabling Test Mode. The computer restarts and setup
-   resumes automatically after the same user signs in.
-6. Reconnect the Bluetooth headset.
-7. Select `Headphones (<device>)` for output and `Headset (<device>)` for input.
-
-Starting the microphone switches Bluetooth audio to the HFP voice path. Lower
-mono playback quality while the microphone is active is a Bluetooth HFP
-limitation.
-
-The installer's **Uninstall / restore Windows** operation removes only this
-project's exact root device and driver packages, restores the Boot Camp path,
-removes the public test certificate and disables Test Mode. If another custom
-driver also relies on Test Mode, review that consequence before uninstalling.
-
-## Option B: build without signing
+### Build without signing
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass -Force
@@ -204,7 +217,7 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 Unsigned packages are written below `artifacts\Release\unsigned`. Windows x64
 will not load these kernel drivers on a normal retail boot.
 
-## Rebuilding only the installer
+### Rebuilding only the installer
 
 After signed packages exist under `artifacts\Release\signed`:
 
@@ -217,7 +230,7 @@ After signed packages exist under `artifacts\Release\signed`:
 The build script derives the driver hashes and versions from the current
 payload. It contains no repository-specific certificate thumbprint.
 
-## Cleaning
+### Cleaning
 
 Generated output is contained in `artifacts`, `build` and component-local build
 directories. These paths are ignored by Git. To start clean, remove only those
