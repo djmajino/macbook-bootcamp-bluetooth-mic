@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E69A8808-BA6D-4EF9-AB68-DC3F639CC57B}</ProjectGuid>
+    <RootNamespace>BthHfpEndpoints</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <KMDF_VERSION_MAJOR>1</KMDF_VERSION_MAJOR>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">x64</Platform>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <DriverTargetPlatform>Windows Driver</DriverTargetPlatform>
+    <DriverType>KMDF</DriverType>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <DriverTargetPlatform>Windows Driver</DriverTargetPlatform>
+    <DriverType>KMDF</DriverType>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)..\build\$(Configuration)\hfp_audio\lib\</OutDir>
+    <IntDir>$(ProjectDir)..\build\obj\$(Configuration)\hfp_audio\lib\</IntDir>
+    <TargetName>BthHfpEndpoints</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <DisableSpecificWarnings>4595;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SpectreMitigation>Spectre</SpectreMitigation>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\vendor\windows-driver-samples\audio\sysvad;$(ProjectDir)..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon;$(ProjectDir)..\uart_h4_probe\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32;UNICODE;_UNICODE;PC_IMPLEMENTATION;DEBUG_LEVEL=DEBUGLVL_TERSE;_USE_WAVERT_;SYSVAD_BTH_BYPASS;BLUETOOTH_MIC_MAC_WB_MODE_FIX;BLUETOOTH_MIC_MAC_HCI_AUDIO_BRIDGE;_NEW_DELETE_OPERATORS_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\AudioModuleHelper.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\bthhfpmictopo.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\bthhfpminwavert.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\bthhfpspeakertopo.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\bthhfptopo.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\MiniportAudioEngineNode.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\MiniportStreamAudioEngineNode.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\mintopo.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\minwavert.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\minwavertstream.cpp" />
+    <ClCompile Include="..\vendor\windows-driver-samples\audio\sysvad\EndpointsCommon\NewDelete.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

@@ -1,0 +1,14 @@
+* text=auto
+*.ps1 text eol=crlf
+*.cs text eol=crlf
+*.c text eol=crlf
+*.cpp text eol=crlf
+*.h text eol=crlf
+*.inf text eol=crlf
+*.inx text eol=crlf
+*.vcxproj text eol=crlf
+*.png binary
+
+# Preserve the formatting of the imported Microsoft sample subset. Its
+# upstream revision contains historical trailing spaces.
+vendor/** whitespace=-trailing-space

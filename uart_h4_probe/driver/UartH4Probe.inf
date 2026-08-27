@@ -1,0 +1,53 @@
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = Extension
+ClassGuid   = {e2f84ce7-8efa-411c-aa69-97454ca4cb57}
+ExtensionId = {75740eb7-ae1b-4dc7-a908-8f07450bacb0}
+Provider    = %ProviderName%
+DriverVer   = 08/27/2026,0.5.0.0
+CatalogFile.ntamd64 = UartH4Probe.cat
+PnpLockDown = 1
+
+[DestinationDirs]
+Probe.CopyFiles = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,
+
+[SourceDisksFiles]
+UartH4Probe.sys = 1
+
+[Manufacturer]
+%ManufacturerName% = Models,NTamd64.10.0...18362
+
+[Models.NTamd64.10.0...18362]
+%DeviceDescription% = ProbeInstall, PCI\VEN_8086&DEV_A328&SUBSYS_72708086
+
+[ProbeInstall]
+CopyFiles = Probe.CopyFiles
+
+[ProbeInstall.Services]
+AddService = UartH4Probe,, ProbeService
+
+[ProbeInstall.Filters]
+AddFilter = UartH4Probe,, ProbeFilter
+
+[ProbeFilter]
+FilterPosition = Upper
+
+[ProbeService]
+DisplayName   = %ServiceDescription%
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %13%\UartH4Probe.sys
+
+[Probe.CopyFiles]
+UartH4Probe.sys
+
+[Strings]
+ProviderName       = "Local UART H4 Research"
+ManufacturerName   = "Local UART H4 Research"
+DeviceDescription = "MacBook Intel UART H4 research filter"
+ServiceDescription = "Bounded Broadcom H4 UART research filter"
+DiskName           = "UART H4 probe installation media"

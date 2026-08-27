@@ -1,0 +1,54 @@
+# Build output
+artifacts/
+build/
+**/build/
+**/obj/
+**/bin/
+**/dist/
+**/x64/
+**/Debug/
+**/Release/
+
+# Visual Studio
+.vs/
+.codex-log/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+
+# Driver and installer binaries
+*.sys
+*.cat
+*.cer
+*.pfx
+*.p12
+*.pvk
+*.pdb
+*.exe
+*.dll
+*.lib
+*.exp
+*.obj
+*.res
+*.iobj
+*.ipdb
+*.zip
+*.cab
+/setup.inf
+/setup.rpt
+
+# Diagnostics and local machine data
+*.dmp
+*.etl
+*.evtx
+*.wav
+*.log
+*.tlog
+*.lastbuildstate
+*.recipe
+last-*
+
+# Local signing configuration
+signing.local.json
+*.secrets.json

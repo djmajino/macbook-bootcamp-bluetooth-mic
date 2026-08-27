@@ -1,0 +1,14 @@
+name: source-audit
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  privacy-and-artifact-audit:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the public tree
+        shell: powershell
+        run: ./scripts/Test-PublicTree.ps1
