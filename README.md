@@ -22,8 +22,10 @@ custom drivers and restore the original Windows configuration.
 
 The current binary uses a local self-signed test certificate and does not have
 a Microsoft production kernel signature. Secure Boot must be disabled, and
-Windows Test Mode must remain enabled while the drivers are loaded. Read the
-safety notes below before installing it.
+Windows Test Mode must remain enabled while the drivers are loaded. On Windows
+11, Smart App Control must also be set to **Off** before installation and must
+remain off while these drivers are installed. The v1.0.0 installer does not
+check this setting. Read the safety notes below before installing it.
 
 ### Install the ready-to-use package
 
@@ -34,14 +36,29 @@ A self-signed kernel driver requires Windows Test Mode for the entire time the
 driver is loaded, not just during installation. The installer cannot disable
 firmware Secure Boot for you.
 
-1. Download `BluetoothMicMac-HFP-Installer.exe` from GitHub Releases.
-2. Right-click it and select **Run as administrator**.
-3. Review the complete prerequisite checklist.
-4. Select **Install**.
-5. If required, approve enabling Test Mode. The computer restarts and setup
+**Windows 11 users:** before running the installer, open **Windows Security >
+App & browser control > Smart App Control settings** and confirm that Smart
+App Control is **Off**. Windows 10 does not have Smart App Control. If it is on,
+Windows can block both locally signed drivers during startup even when Test
+Mode is enabled. This may produce Device Manager Code 39 on the Intel UART and
+make the built-in Bluetooth radio disappear completely after a restart. If
+that happens, set Smart App Control to **Off**, restart Windows and check the
+devices again.
+
+Turning Smart App Control off reduces Windows protection against untrusted
+software. If you do not accept that security trade-off, do not install this
+driver. The setting must remain off for as long as the locally signed drivers
+are in use.
+
+1. On Windows 11, confirm that Smart App Control is **Off** as described above.
+2. Download `BluetoothMicMac-HFP-Installer.exe` from GitHub Releases.
+3. Right-click it and select **Run as administrator**.
+4. Review the complete prerequisite checklist.
+5. Select **Install**.
+6. If required, approve enabling Test Mode. The computer restarts and setup
    resumes automatically after the same user signs in.
-6. Reconnect the Bluetooth headset.
-7. Select `Headphones (<device>)` for output and `Headset (<device>)` for input.
+7. Reconnect the Bluetooth headset.
+8. Select `Headphones (<device>)` for output and `Headset (<device>)` for input.
 
 Starting the microphone switches Bluetooth audio to the HFP voice path. Lower
 mono playback quality while the microphone is active is a Bluetooth HFP
